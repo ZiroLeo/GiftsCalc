@@ -20,19 +20,25 @@
             background-image: 
                 radial-gradient(circle at 25% 25%, rgba(120, 119, 198, 0.1) 0%, transparent 55%),
                 radial-gradient(circle at 75% 75%, rgba(255, 119, 198, 0.05) 0%, transparent 55%);
+            position: relative;
         }
+        
         canvas {
-          display: block;
-          position: absolute;
-         top: 0;
-         left: 0;
-          width: 100%;
-          height: 100%;
-          z-index: -1;
-}
+            display: block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        
         .container {
             max-width: 1200px;
             margin: 0 auto;
+            position: relative;
+            z-index: 1;
+            padding-bottom: 120px;
         }
         
         header {
@@ -48,13 +54,6 @@
             background-clip: text;
             color: transparent;
             margin-bottom: 10px;
-        }
-        
-        .subtitle {
-            color: #a5a5a5;
-            font-size: 1.1rem;
-            max-width: 600px;
-            margin: 0 auto;
         }
         
         .add-row-btn {
@@ -140,11 +139,9 @@
             color: #fff;
             font-size: 1rem;
             transition: all 0.3s ease;
-            /* حذف دکمه‌های بالا/پایین */
             -moz-appearance: textfield;
         }
         
-        /* حذف دکمه‌های بالا/پایین برای مرورگرهای مختلف */
         input[type=number]::-webkit-inner-spin-button,
         input[type=number]::-webkit-outer-spin-button {
             -webkit-appearance: none;
@@ -207,6 +204,7 @@
             gap: 5px;
         }
         
+        /* بخش Total Profit */
         .total-container {
             position: fixed;
             bottom: 30px;
@@ -217,21 +215,93 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 15px;
-            min-width: 200px;
+            gap: 8px;
+            min-width: 180px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
         }
         
         .total-label {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             color: #a5a5a5;
+            font-weight: 500;
         }
         
         .total-value {
             font-size: 1.8rem;
             font-weight: bold;
             color: #10b981;
+        }
+        
+        /* بخش Value */
+        .value-container {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 20px 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            min-width: 180px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+        }
+        
+        .value-label {
+            font-size: 1.1rem;
+            color: #a5a5a5;
+            font-weight: 500;
+        }
+        
+        .value-amount {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #8b5cf6;
+        }
+        
+        /* دکمه اسکرول به پایین */
+        .scroll-down-btn {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            opacity: 0;
+            visibility: hidden;
+            z-index: 999;
+        }
+        
+        .scroll-down-btn.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .scroll-down-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateX(-50%) translateY(-2px);
+        }
+        
+        .scroll-down-btn svg {
+            width: 24px;
+            height: 24px;
+            color: #e0e0e0;
         }
         
         .delete-btn {
@@ -262,6 +332,29 @@
             height: 16px;
         }
         
+        /* Credit متن */
+        .credit {
+            position: fixed;
+            left: 18px;
+            bottom: 14px;
+            z-index: 1001;
+            font-family: 'SFRpro', sans-serif;
+            font-size: 14px;
+            text-decoration: none;
+            background: linear-gradient(90deg, #00ffff, #00bfa5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+            opacity: 0.85;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+        
+        .credit:hover {
+            opacity: 1;
+            transform: translateY(-1px);
+        }
+        
         @media (max-width: 1024px) {
             .row-header, .row-content {
                 grid-template-columns: 1fr;
@@ -272,10 +365,27 @@
                 display: none;
             }
             
+            /* در موبایل Value و Profit در مرکز قرار می‌گیرند */
+            .value-container,
             .total-container {
                 position: static;
+                margin: 15px auto;
+                width: 90%;
+                max-width: 300px;
+            }
+            
+            .scroll-down-btn {
+                bottom: 80px;
+            }
+            
+            .credit {
+                position: relative;
+                left: auto;
+                bottom: auto;
+                display: block;
+                text-align: center;
                 margin-top: 30px;
-                justify-content: center;
+                margin-bottom: 20px;
             }
         }
     </style>
@@ -286,7 +396,7 @@
             <h1>Gift Calculator</h1>
         </header>
         <canvas id="background"></canvas>
-        <div class="navbar">
+        
         <div id="gift-rows-container">
             <!-- Gift rows will be added here dynamically -->
         </div>
@@ -297,35 +407,97 @@
             </svg>
             Add Gift
         </button>
-        
-        <div class="total-container">
-            <div class="total-label">Total Profit:</div>
-            <div class="total-value">0 TON</div>
-        </div>
     </div>
+    
+    <!-- دکمه اسکرول به پایین -->
+    <div class="scroll-down-btn" id="scroll-down-btn">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 13.5 12 21m0 0-7.5-7.5M12 21V3" />
+        </svg>
+    </div>
+    
+    <!-- بخش Value و Profit در پایین صفحه -->
+    <div class="value-container">
+        <div class="value-label">Total Value:</div>
+        <div class="value-amount" id="total-value-display">0 TON</div>
+    </div>
+    
+    <div class="total-container">
+        <div class="total-label">Total Profit:</div>
+        <div class="total-value" id="total-profit-display">0 TON</div>
+    </div>
+    
+    <!-- Credit متن -->
+    <a href="https://t.me/geloriu" target="_blank" rel="noopener noreferrer" class="credit">
+        Cooked with caffeine ☕ — Bardia
+    </a>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const giftRowsContainer = document.getElementById('gift-rows-container');
             const addRowButton = document.getElementById('add-row');
-            const totalContainer = document.querySelector('.total-container .total-value');
+            const scrollDownBtn = document.getElementById('scroll-down-btn');
+            
+            // نمایشگرهای Value و Profit
+            const totalValueDisplay = document.getElementById('total-value-display');
+            const totalProfitDisplay = document.getElementById('total-profit-display');
             
             // Constants
-            const STAR_PRICE = 0.00938; // Price per star in TON
-            const MARKET_FEE_PERCENT = 20; // Telegram market fee percentage
-            const CONVERSION_FEE_PERCENT = 25; // Conversion fee percentage
-            const SELLING_FEE_PERCENT = 10; // Selling fee percentage
-            const BUY_FEE_ADDITION = 0.2; // Addition to purchase price
+            const STAR_PRICE = 0.00938;
+            const MARKET_FEE_PERCENT = 20;
+            const CONVERSION_FEE_PERCENT = 25;
+            const SELLING_FEE_PERCENT = 10;
+            const BUY_FEE_ADDITION = 0.2;
             
-            // Load saved data from localStorage
+            // Load saved data
             let giftRows = JSON.parse(localStorage.getItem('giftRows')) || [];
             
-            // Initialize with one row if empty
             if (giftRows.length === 0) {
                 giftRows = [{ id: Date.now(), giftId: '', bid: '', sell: '' }];
             }
             
-            // Function to calculate all values
+            // اسکریپت محاسبه ارزش کل و سود کل
+            function calculateTotalValues() {
+                let totalValue = 0;
+                let totalProfit = 0;
+                
+                giftRows.forEach(row => {
+                    const bid = parseFloat(row.bid) || 0;
+                    const sell = parseFloat(row.sell) || 0;
+                    
+                    // محاسبات داخلی (همان‌طور که در کد اول بود)
+                    const buyPrice = bid + BUY_FEE_ADDITION;
+                    const effectiveSellPrice = sell * (1 - SELLING_FEE_PERCENT / 100);
+                    const profit = effectiveSellPrice - buyPrice;
+                    
+                    // جمع مقادیر
+                    totalValue += bid;
+                    totalProfit += profit;
+                    
+                    // ذخیره مقادیر محاسبه شده در ردیف
+                    row.buyPrice = buyPrice;
+                    row.effectiveSellPrice = effectiveSellPrice;
+                    row.profit = profit;
+                });
+                
+                // به‌روزرسانی نمایشگرها
+                totalValueDisplay.textContent = `${totalValue.toFixed(2)} TON`;
+                totalProfitDisplay.textContent = `${totalProfit.toFixed(2)} TON`;
+                
+                // تغییر رنگ Profit بر اساس مثبت یا منفی بودن
+                if (totalProfit >= 0) {
+                    totalProfitDisplay.style.color = '#10b981';
+                } else {
+                    totalProfitDisplay.style.color = '#ef4444';
+                }
+                
+                return {
+                    totalValue,
+                    totalProfit
+                };
+            }
+            
+            // تابع محاسبه مقادیر هر ردیف
             function calculateRowValues(rowId) {
                 const row = giftRows.find(r => r.id === rowId);
                 if (!row) return;
@@ -333,36 +505,29 @@
                 const bid = parseFloat(row.bid) || 0;
                 const sell = parseFloat(row.sell) || 0;
                 
-                // Calculate buy price (bid + 0.2)
+                // محاسبات داخلی (بدون نمایش به کاربر)
                 const buyPrice = bid + BUY_FEE_ADDITION;
-                
-                // Calculate effective sell price (sell - 10%)
                 const effectiveSellPrice = sell * (1 - SELLING_FEE_PERCENT / 100);
-                
-                // Calculate stars needed to match the effective sell price
-                // We need to find X such that: X * STAR_PRICE * (1 - MARKET_FEE_PERCENT/100) * (1 - CONVERSION_FEE_PERCENT/100) = effectiveSellPrice
                 const starsNeeded = effectiveSellPrice / (STAR_PRICE * (1 - MARKET_FEE_PERCENT/100) * (1 - CONVERSION_FEE_PERCENT/100));
-                
-                // Calculate profit
                 const profit = effectiveSellPrice - buyPrice;
                 
-                // Update row data
+                // ذخیره مقادیر
                 row.buyPrice = buyPrice;
                 row.effectiveSellPrice = effectiveSellPrice;
                 row.starsNeeded = starsNeeded;
                 row.profit = profit;
                 
-                // Save to localStorage
-                saveToLocalStorage();
-                
-                // Update UI for this row
+                // به‌روزرسانی UI ردیف
                 updateRowUI(rowId);
                 
-                // Update total profit
-                updateTotalProfit();
+                // محاسبه مجدد کل مقادیر
+                calculateTotalValues();
+                
+                // ذخیره در localStorage
+                saveToLocalStorage();
             }
             
-            // Function to update row UI
+            // تابع به‌روزرسانی UI ردیف
             function updateRowUI(rowId) {
                 const row = giftRows.find(r => r.id === rowId);
                 if (!row) return;
@@ -370,40 +535,18 @@
                 const rowElement = document.querySelector(`[data-row-id="${rowId}"]`);
                 if (!rowElement) return;
                 
-                const buyPriceEl = rowElement.querySelector('.buy-price');
-                const effectiveSellPriceEl = rowElement.querySelector('.effective-sell-price');
                 const starsNeededEl = rowElement.querySelector('.stars-needed');
                 const profitEl = rowElement.querySelector('.profit-value');
                 
-                if (buyPriceEl) {
-                    buyPriceEl.textContent = row.buyPrice.toFixed(2);
-                }
-                
-                if (effectiveSellPriceEl) {
-                    effectiveSellPriceEl.textContent = row.effectiveSellPrice.toFixed(2);
-                }
-                
-                if (starsNeededEl) {
-                    starsNeededEl.textContent = Math.ceil(row.starsNeeded);
-                }
-                
+                // فقط ستون‌های Stars و Profit را به‌روز می‌کنیم
+                if (starsNeededEl) starsNeededEl.textContent = Math.ceil(row.starsNeeded);
                 if (profitEl) {
                     profitEl.textContent = row.profit.toFixed(2);
-                    // Color code profit (green for positive, red for negative)
                     profitEl.style.color = row.profit >= 0 ? '#10b981' : '#ef4444';
                 }
             }
             
-            // Function to update total profit
-            function updateTotalProfit() {
-                const totalProfit = giftRows.reduce((total, row) => {
-                    return total + (row.profit || 0);
-                }, 0);
-                
-                totalContainer.textContent = `${totalProfit.toFixed(2)} TON`;
-            }
-            
-            // Function to create a new gift row
+            // تابع ایجاد ردیف جدید (مشابه کد اول)
             function createGiftRow(rowData) {
                 const rowId = rowData.id;
                 
@@ -458,7 +601,7 @@
                     <button class="delete-btn" title="Delete this gift">×</button>
                 `;
                 
-                // Add event listeners
+                // Event listeners
                 const giftIdInput = rowElement.querySelector('.gift-id-input');
                 const bidInput = rowElement.querySelector('.bid-input');
                 const sellInput = rowElement.querySelector('.sell-input');
@@ -488,21 +631,16 @@
                     }
                 });
                 
-                // Prevent scroll wheel from changing number inputs
-                bidInput.addEventListener('wheel', function(e) {
-                    e.preventDefault();
-                });
-                
-                sellInput.addEventListener('wheel', function(e) {
-                    e.preventDefault();
-                });
+                // جلوگیری از تغییر با اسکرول
+                bidInput.addEventListener('wheel', e => e.preventDefault());
+                sellInput.addEventListener('wheel', e => e.preventDefault());
                 
                 deleteBtn.addEventListener('click', function() {
                     if (giftRows.length > 1) {
                         giftRows = giftRows.filter(r => r.id !== rowId);
                         saveToLocalStorage();
                         rowElement.remove();
-                        updateTotalProfit();
+                        calculateTotalValues();
                     } else {
                         alert("You need to have at least one gift row.");
                     }
@@ -511,7 +649,7 @@
                 return rowElement;
             }
             
-            // Function to add a new gift row
+            // تابع اضافه کردن ردیف جدید
             function addGiftRow() {
                 const newRowData = {
                     id: Date.now(),
@@ -523,13 +661,16 @@
                 giftRows.push(newRowData);
                 const rowElement = createGiftRow(newRowData);
                 giftRowsContainer.appendChild(rowElement);
+                
+                // محاسبه اولیه
+                calculateTotalValues();
                 saveToLocalStorage();
                 
-                // Scroll to the new row
+                // اسکرول به ردیف جدید
                 rowElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             }
             
-            // Function to save data to localStorage
+            // تابع ذخیره در localStorage
             function saveToLocalStorage() {
                 const dataToSave = giftRows.map(row => ({
                     id: row.id,
@@ -545,99 +686,174 @@
                 localStorage.setItem('giftRows', JSON.stringify(dataToSave));
             }
             
-            // Function to initialize the app
+            // تابع مقداردهی اولیه برنامه
             function initializeApp() {
-                // Clear the container
                 giftRowsContainer.innerHTML = '';
                 
-                // Create rows from saved data
                 giftRows.forEach(rowData => {
                     const rowElement = createGiftRow(rowData);
                     giftRowsContainer.appendChild(rowElement);
                     
-                    // Calculate values for this row
                     if (rowData.bid || rowData.sell) {
                         calculateRowValues(rowData.id);
                     }
                 });
                 
-                // Update total profit
-                updateTotalProfit();
+                // محاسبه کل مقادیر
+                calculateTotalValues();
             }
             
-            // Event listener for adding new rows
+         // === بخش دکمه اسکرول ===
+let isScrollingDown = false;
+let lastScrollTop = 0;
+let scrollTimeout;
+
+function handleScroll() {
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    const windowHeight = window.innerHeight;
+    const documentHeight = document.documentElement.scrollHeight;
+    
+    // تشخیص جهت اسکرول
+    if (scrollTop > lastScrollTop) {
+        isScrollingDown = true;
+    } else {
+        isScrollingDown = false;
+    }
+    lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+    
+    // محاسبه فاصله تا انتهای صفحه
+    const distanceFromBottom = documentHeight - (scrollTop + windowHeight);
+    
+    // پیدا کردن دکمه Add Gift
+    const addRowButton = document.getElementById('add-row');
+    const addRowButtonRect = addRowButton.getBoundingClientRect();
+    const addRowButtonPosition = scrollTop + addRowButtonRect.top;
+    
+    // اگر کاربر نزدیک انتهای صفحه است (پایین‌تر از دکمه Add Gift)، دکمه را مخفی کن
+    if (scrollTop > addRowButtonPosition || distanceFromBottom < 200) {
+        scrollDownBtn.classList.remove('show');
+        return;
+    }
+    
+    // اگر به اندازه 100px اسکرول کرده باشد و به پایین اسکرول می‌کند
+    if (scrollTop > 100 && isScrollingDown) {
+        scrollDownBtn.classList.add('show');
+    } else {
+        scrollDownBtn.classList.remove('show');
+    }
+    
+    // تایمر برای مخفی کردن دکمه بعد از توقف اسکرول
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(function() {
+        scrollDownBtn.classList.remove('show');
+    }, 1500);
+}
+
+// Event listener برای دکمه اسکرول
+scrollDownBtn.addEventListener('click', function() {
+    // پیدا کردن دکمه Add Gift
+    const addRowButton = document.getElementById('add-row');
+    
+    // اسکرول به موقعیت دکمه Add Gift
+    addRowButton.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+    });
+    
+    // بعد از شروع اسکرول، دکمه را مخفی کن
+    setTimeout(() => {
+        scrollDownBtn.classList.remove('show');
+    }, 300);
+});
+
+// کنترل اسکرول
+window.addEventListener('scroll', handleScroll);
+// === پایان بخش دکمه اسکرول ===
+            
+            // Event listeners
             addRowButton.addEventListener('click', addGiftRow);
             
-            // Initialize the app
+            scrollDownBtn.addEventListener('click', function() {
+                window.scrollTo({
+                    top: document.documentElement.scrollHeight,
+                    behavior: 'smooth'
+                });
+            });
+            
+            // کنترل اسکرول
+            window.addEventListener('scroll', handleScroll);
+            
+            // مقداردهی اولیه
             initializeApp();
             
-            // Auto-save periodically
+            // ذخیره خودکار
             setInterval(saveToLocalStorage, 10000);
+            
+            // انیمیشن Background
+            const canvas = document.getElementById("background");
+            const ctx = canvas.getContext("2d");
+            
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            
+            const particles = [];
+            
+            class Particle {
+                constructor(x, y, radius, speedX, speedY, color) {
+                    this.x = x;
+                    this.y = y;
+                    this.radius = radius;
+                    this.speedX = speedX;
+                    this.speedY = speedY;
+                    this.color = color;
+                }
+            
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = this.color;
+                    ctx.fill();
+                    ctx.closePath();
+                }
+            
+                update() {
+                    this.x += this.speedX;
+                    this.y += this.speedY;
+            
+                    if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
+                        this.x = Math.random() * canvas.width;
+                        this.y = Math.random() * canvas.height;
+                    }
+            
+                    this.draw();
+                }
+            }
+            
+            // ایجاد ذرات
+            for (let i = 0; i < 80; i++) {
+                const x = Math.random() * canvas.width;
+                const y = Math.random() * canvas.height;
+                const radius = Math.random() * 2 + 1;
+                const speedX = (Math.random() - 0.5) * 0.4;
+                const speedY = (Math.random() - 0.5) * 0.4;
+                const color = `rgba(255, 255, 255, ${Math.random() * 0.05 + 0.03})`;
+                particles.push(new Particle(x, y, radius, speedX, speedY, color));
+            }
+            
+            // حلقه انیمیشن
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach((particle) => particle.update());
+                requestAnimationFrame(animate);
+            }
+            
+            animate();
+            
+            window.addEventListener("resize", () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            });
         });
-           // Animated Circles
-const canvas = document.getElementById("background");
-const ctx = canvas.getContext("2d");
-
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-const particles = [];
-
-class Particle {
-    constructor(x, y, radius, speedX, speedY, color) {
-        this.x = x;
-        this.y = y;
-        this.radius = radius;
-        this.speedX = speedX;
-        this.speedY = speedY;
-        this.color = color;
-    }
-
-    draw() {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.fillStyle = this.color;
-        ctx.fill();
-        ctx.closePath();
-    }
-
-    update() {
-        this.x += this.speedX;
-        this.y += this.speedY;
-
-        if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
-            this.x = Math.random() * canvas.width;
-            this.y = Math.random() * canvas.height;
-        }
-
-        this.draw();
-    }
-}
-
-// Create particles
-for (let i = 0; i < 100; i++) {
-    const x = Math.random() * canvas.width;
-    const y = Math.random() * canvas.height;
-    const radius = Math.random() * 3 + 1;
-    const speedX = (Math.random() - 0.5) * 0.5;
-    const speedY = (Math.random() - 0.5) * 0.5;
-    const color = `rgba(255, 255, 255, ${Math.random()})`;
-    particles.push(new Particle(x, y, radius, speedX, speedY, color));
-}
-
-// Animation loop
-function animate() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    particles.forEach((particle) => particle.update());
-    requestAnimationFrame(animate);
-}
-
-animate();
-
-window.addEventListener("resize", () => {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-});
     </script>
 </body>
 </html>
